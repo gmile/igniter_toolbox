@@ -55,6 +55,13 @@ mix igniter.gen.test_case test/user_test.exs "create" "returns error when email 
 mix igniter.gen.test_case test/user_test.exs "new_feature" "handles edge case" --yes
 ```
 
+## Releasing
+
+1. Bump version in `mix.exs`
+2. Commit the change
+3. Tag it: `git tag vX.Y.Z`
+4. Push the tag: `git push origin vX.Y.Z`
+
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
