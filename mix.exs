@@ -8,7 +8,7 @@ defmodule IgniterToolbox.MixProject do
     [
       app: :igniter_toolbox,
       version: @version,
-      elixir: "~> 1.14",
+      elixir: "~> 1.19",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
