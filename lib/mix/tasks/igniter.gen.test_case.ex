@@ -101,7 +101,12 @@ defmodule Mix.Tasks.Igniter.Gen.TestCase do
         [first | _] ->
           {call, meta, [{n, nm, _}, rest]} = first.node
           new_test = {call, meta, [{n, nm, [desc]}, rest]}
-          {:ok, tests |> List.last() |> Common.add_code(new_test, placement: :after) |> Zipper.topmost()}
+
+          {:ok,
+           tests
+           |> List.last()
+           |> Common.add_code(new_test, placement: :after)
+           |> Zipper.topmost()}
       end
     end
   end
