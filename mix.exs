@@ -25,8 +25,8 @@ defmodule IgniterToolbox.MixProject do
 
   defp deps do
     [
-      {:igniter, "~> 0.5"},
-      {:ex_doc, "~> 0.30", only: :dev, runtime: false}
+      {:igniter, "~> 0.7"},
+      {:ex_doc, "~> 0.3", only: :dev, runtime: false}
     ]
   end
 
