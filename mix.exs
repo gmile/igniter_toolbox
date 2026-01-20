@@ -1,8 +1,8 @@
 defmodule IgniterToolbox.MixProject do
   use Mix.Project
 
-  @version "0.1.2"
-  @source_url "https://github.com/yourusername/igniter_toolbox"
+  @version File.read!("VERSION") |> String.trim()
+  @source_url "https://github.com/gmile/igniter_toolbox"
 
   def project do
     [
@@ -34,14 +34,14 @@ defmodule IgniterToolbox.MixProject do
     [
       licenses: ["MIT"],
       links: %{"GitHub" => @source_url},
-      files: ~w(lib .formatter.exs mix.exs README.md LICENSE)
+      files: ~w(lib .formatter.exs mix.exs VERSION README.md LICENSE CHANGELOG.md)
     ]
   end
 
   defp docs do
     [
       main: "readme",
-      extras: ["README.md", "LICENSE"]
+      extras: ["README.md", "CHANGELOG.md", "LICENSE"]
     ]
   end
 end
