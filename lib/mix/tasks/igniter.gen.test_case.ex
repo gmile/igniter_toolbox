@@ -88,7 +88,9 @@ defmodule Mix.Tasks.Igniter.Gen.TestCase do
     with {:ok, body} <- Common.move_to_do_block(describe) do
       tests =
         body
-        |> Common.find_all(&Function.function_call?(&1, :test, 2))
+        |> Common.find_all(fn z ->
+          Function.function_call?(z, :test, 2) or Function.function_call?(z, :test, 3)
+        end)
         |> Enum.filter(fn z ->
           {_, meta, _} = z.node
           meta[:line] >= desc_start and meta[:line] <= desc_end
@@ -99,8 +101,7 @@ defmodule Mix.Tasks.Igniter.Gen.TestCase do
           {:error, "No tests in describe block"}
 
         [first | _] ->
-          {call, meta, [{n, nm, _}, rest]} = first.node
-          new_test = {call, meta, [{n, nm, [desc]}, rest]}
+          new_test = replace_test_description(first.node, desc)
 
           {:ok,
            tests
@@ -114,5 +115,26 @@ defmodule Mix.Tasks.Igniter.Gen.TestCase do
   defp format_matches(path, matches) do
     lines = Enum.map_join(matches, "\n", fn {name, line} -> "  - Line #{line}: #{name}" end)
     "Multiple matches in #{path}:\n#{lines}"
+  end
+
+  # test/2: test "name" do ... end (name as plain string)
+  defp replace_test_description({call, meta, [name, body]}, desc)
+       when is_binary(name) and is_list(body) do
+    {call, meta, [desc, body]}
+  end
+
+  # test/2: test "name" do ... end (name as AST node)
+  defp replace_test_description({call, meta, [{n, nm, _}, body]}, desc) when is_list(body) do
+    {call, meta, [{n, nm, [desc]}, body]}
+  end
+
+  # test/3: test "name", %{conn: conn} do ... end (name as plain string)
+  defp replace_test_description({call, meta, [name, context, body]}, desc) when is_binary(name) do
+    {call, meta, [desc, context, body]}
+  end
+
+  # test/3: test "name", %{conn: conn} do ... end (name as AST node)
+  defp replace_test_description({call, meta, [{n, nm, _}, context, body]}, desc) do
+    {call, meta, [{n, nm, [desc]}, context, body]}
   end
 end
